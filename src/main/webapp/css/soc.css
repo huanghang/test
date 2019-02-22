@@ -1,0 +1,76 @@
+form .fade {
+    display: none;
+    background-color: #c26565;
+    color: #fff;
+    font-size: 13px;
+    padding:10px 15px;
+    margin-bottom: 15px;
+    margin-left: 25%;
+    width: 35%;
+}
+
+form .state-error input + em.invalid {
+     color: #d56161;
+     display: block;
+     font-size: 11px;
+     font-style: normal;
+     line-height: 15px;
+     margin-top: 6px;
+     padding: 0 1px;
+ }
+
+form .state-error textarea + em.invalid {
+    color: #d56161;
+    display: block;
+    font-size: 11px;
+    font-style: normal;
+    line-height: 15px;
+    margin-top: 6px;
+    padding: 0 1px;
+}
+
+form .state-error + em.invalid {
+    color: #d56161;
+    display: block;
+    font-size: 11px;
+    font-style: normal;
+    line-height: 15px;
+    margin-top: 6px;
+    padding: 0 1px;
+}
+
+form .checkbox.state-error i,
+form .radio.state-error i,
+form .state-error input.invalid,
+form .state-error select,
+form .state-error textarea.invalid,
+form .toggle.state-error i {
+    background: #fff0f0 none repeat scroll 0 0;
+    border-color: #a90329;
+}
+
+.soc-pages-items{
+    width: 50%;
+    float: right;
+}
+
+.paging_full_numbers {
+    float:right;
+}
+.paging_full_numbers a {
+    margin-right: 2px;
+}
+#table_first{
+    width: 50px;
+}
+#table_previous {
+    width: 50px;
+}
+#table_next {
+    width: 50px;
+}
+#table_last{
+    width: 50px;
+}
+
+
