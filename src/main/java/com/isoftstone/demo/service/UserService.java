@@ -12,5 +12,5 @@ public interface UserService {
 
     public Page<User> getList(Page page);
 
-
+    public boolean findUser(User user);
 }

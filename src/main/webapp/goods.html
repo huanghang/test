@@ -7,16 +7,42 @@
     <meta http-equiv="Cache-Control" CONTENT="no-store">
     <meta http-equiv="Pragma" content="no-cache">
     <title>商品信息--新增</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="css/soc.css">
-    <script src="js/jquery-2.1.1.min.js" type="text/javascript"></script>
-    <script src="js/jquery.ajaxfileupload.js" type="text/javascript"></script>
-    <script src="js/jquery.validate.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="js/jquery-form.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/soc.css">
+    <script src="../js/jquery-2.1.1.min.js" type="text/javascript"></script>
+    <script src="../js/jquery.ajaxfileupload.js" type="text/javascript"></script>
+    <script src="../js/jquery.validate.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/jquery-form.min.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
 <div class="con_panel block">
-    <div class="panel_body" >
+    <div class="panel_body">
+        <div style="height: 100px;">
+            <div style="margin-top:20px;height: 50px;font-size: 24px;margin-left: 5%;font-family: 微软雅黑;color: midnightblue">
+                <span>XX网上商城</span>
+                <span style="float:right;font-size: 14px;margin-right: 200px;margin-top: 10px;"
+                      id="username">欢迎用户登录</span>
+            </div>
+            <div style="height: 40px;background:#3B99FC">
+                <ul style="width: 1190px;margin-left: auto;margin-right: auto;position: relative;height: 40px;position: relative;z-index: 1900;">
+                    <li style="width: 145px;float:left;"><a
+                            style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;background: #2676E3">商品管理</a>
+                    </li>
+                    <li style="width: 145px;float:left;"><a
+                            style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;">订单管理</a>
+                    </li>
+                    <li style="width: 145px;float:left;"><a
+                            style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;">用户管理</a>
+                    </li>
+                    <li style="width: 145px;float:left;"><a
+                            style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;"></a>
+                    </li>
+                    <li style="width: 145px;float:left;"><a
+                            style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <div class="panel_body_title">
             <span>商品信息</span>
             <em>></em>
@@ -48,7 +74,7 @@
                     </div>
                     <input type="file" name="file" id="file" style="width: 190px;"/>
                     <input type="button" id="upload" value="上传" class="btn btn_b"/><br/>
-                    <img  width="100px" height="100px" id="pic" style="margin-left:100px;"/>
+                    <img width="100px" height="100px" id="pic" style="margin-left:100px;"/>
                     <input type="hidden" name="image" id="image"/>
                 </li>
                 <li class="nbm w100">
@@ -66,44 +92,59 @@
 </html>
 <script type="text/javascript">
     $(function () {
-        $("#pic").hide();
-        $("#upload").click(function () {
-            var formData = new FormData();
-            formData.append('file', $('#file')[0].files[0]);
-            $.ajax({
-                url: 'goods/upload',
-                type: 'POST',
-                cache: false,
-                data: formData,
-                cache: false,
-                processData: false,
-                contentType: false,
-                encType: "multipart/form-data",
-                success: function (data) {
-                    $("#image").val(data.message);
-                    $("#pic").attr("src", data.message);
-                    $("#pic").show();
-                }, error: function (data) {
-                    $("#error").val(data.message)
+        $.ajax({
+            type: "POST",
+            url: "../user/check",
+            success: function (data) {
+                if (data.code == "200") {
+                    $("#username").html("欢迎 "+data.message);
+                    $("#pic").hide();
+                    $("#upload").click(function () {
+                        var formData = new FormData();
+                        formData.append('file', $('#file')[0].files[0]);
+                        $.ajax({
+                            url: '../goods/upload',
+                            type: 'POST',
+                            cache: false,
+                            data: formData,
+                            cache: false,
+                            processData: false,
+                            contentType: false,
+                            encType: "multipart/form-data",
+                            success: function (data) {
+                                $("#image").val(data.message);
+                                $("#pic").attr("src", data.message);
+                                $("#pic").show();
+                            }, error: function (data) {
+                                $("#error").val(data.message)
+                            }
+                        })
+                    });
+                    $("#save").click(function () {
+                        $.ajax({
+                            type: "POST",
+                            url: "../goods/save",
+                            data: {
+                                "name": $("#name").val(),
+                                "size": $("#size").val(),
+                                "image": $("#image").val()
+                            },
+                            success: function (data) {
+                                if (data.code == "200") {
+                                    alert("保存成功");
+                                } else if (data.code == "500") {
+                                    $("#error").html(data.message)
+                                }
+                            }
+                        });
+                    });
+                    $("#back").click(function () {
+                        window.location.href = "../goods/list";
+                    });
+                } else {
+                    window.location.href = "../";
                 }
-            })
-        });
-        $("#save").click(function () {
-            $.ajax({
-                type: "POST",
-                url: "goods/save",
-                data: {
-                    "name": $("#name").val(),
-                    "size": $("#size").val(),
-                    "image": $("#image").val()
-                },
-                success: function (data) {
-                   alert("保存成功");
-                }
-            });
-        });
-
-
+            }
+        })
     })
-
 </script>

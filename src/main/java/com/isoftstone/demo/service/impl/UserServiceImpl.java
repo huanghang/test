@@ -1,20 +1,12 @@
 package com.isoftstone.demo.service.impl;
 
-import com.isoftstone.demo.bean.Result;
 import com.isoftstone.demo.bean.User;
-import com.isoftstone.demo.kit.DateFormatKit;
-import com.isoftstone.demo.kit.StrKit;
 import com.isoftstone.demo.service.UserService;
 import com.isoftstone.demo.util.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -37,6 +29,19 @@ public class UserServiceImpl implements UserService {
         list.add(u5);
         Integer total = 200;
         return new Page<User>(page.getPageSize(), page.getPageNum(), total, list);
+    }
+
+    /**
+     * 登录校验
+     * @param user
+     * @return
+     */
+    @Override
+    public boolean findUser(User user) {
+        if(user.getName().equals("admin")&&user.getPassword().equals("123456")){
+            return true;
+        }
+        return false;
     }
 
 

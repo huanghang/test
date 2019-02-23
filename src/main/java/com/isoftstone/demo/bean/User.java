@@ -6,14 +6,14 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = -1430734487197778867L;
     private String name;
-    private String age;
+    private String password;
 
     public User() {
     }
 
-    public User(String name, String age) {
+    public User(String name, String password) {
         this.name = name;
-        this.age = age;
+        this.password = password;
     }
 
     public String getName() {
@@ -24,11 +24,12 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    public String getAge() {
-        return age;
+    public String getPassword() {
+        return password;
     }
 
-    public void setAge(String age) {
-        this.age = age;
+    public void setPassword(String password) {
+        this.password = password;
     }
+
 }

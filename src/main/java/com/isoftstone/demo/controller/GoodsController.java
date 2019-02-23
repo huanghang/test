@@ -3,6 +3,7 @@ package com.isoftstone.demo.controller;
 import com.isoftstone.demo.bean.Goods;
 import com.isoftstone.demo.bean.Result;
 import com.isoftstone.demo.service.GoodsService;
+import com.isoftstone.demo.util.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,38 @@ public class GoodsController {
     private GoodsService goodsService;
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
+
+    /**
+     * 跳转列表页面
+     * @return
+     */
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public String tolist() {
+        return "goodsList";
+    }
+
+    /**
+     * 跳到新增页面
+     * @return
+     */
+    @RequestMapping(value = "/add",method = RequestMethod.GET)
+    public String toAdd(){
+        return "goods";
+    }
+
+    /**
+     * 分页
+     * @param name
+     * @param page
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/page", method = RequestMethod.POST)
+    public Result page(String name,Page page) {
+        String param=name;
+        System.out.println(param);
+        return Result.success(goodsService.getList(page));
+    }
 
     /**
      * 上传图片

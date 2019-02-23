@@ -207,7 +207,6 @@ a:hover {
 /*左侧边栏 end*/
 /*右侧内容区域 start*/
 .con_panel.block > .panel_body {
-    float: right;
     border: 1px solid #f7f7f7;
     border-top: 0px;
 }

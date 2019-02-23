@@ -11,6 +11,12 @@ public class Goods implements Serializable {
     public Goods() {
     }
 
+    public Goods(String name, String size, String image) {
+        this.name = name;
+        this.size = size;
+        this.image = image;
+    }
+
     public String getName() {
         return name;
     }

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="Expires" CONTENT="0">
+    <meta http-equiv="Cache-Control" CONTENT="no-cache">
+    <meta http-equiv="Cache-Control" CONTENT="no-store">
+    <meta http-equiv="Pragma" content="no-cache">
+    <title>商品信息--列表</title>
+    <link rel="stylesheet" type="text/css" href="../css/jquery-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/soc.css">
+    <script src="../js/jquery.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+    <script src="../js/jquery.dataTables.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class="con_panel block">
+    <div class="panel_body">
+        <div style="height: 100px;">
+            <div style="margin-top:20px;height: 50px;font-size: 24px;margin-left: 5%;font-family: 微软雅黑;color: midnightblue">
+                <span>XX网上商城</span>
+                <span style="float:right;font-size: 14px;margin-right: 200px;margin-top: 10px;" id="username">欢迎用户登录</span>
+            </div>
+            <div style="height: 40px;background:#3B99FC">
+                <ul style="width: 1190px;margin-left: auto;margin-right: auto;position: relative;height: 40px;position: relative;z-index: 1900;">
+                    <li style="width: 145px;float:left;"><a style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;background: #2676E3">商品管理</a></li>
+                    <li style="width: 145px;float:left;"><a style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;">订单管理</a></li>
+                    <li style="width: 145px;float:left;"><a style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;">用户管理</a></li>
+                    <li style="width: 145px;float:left;"><a style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;"></a></li>
+                    <li style="width: 145px;float:left;"><a style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;"></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel_body_title">
+            <span>商品信息</span>
+            <em>></em>
+            <span>列表</span>
+        </div>
+        <form>
+            <ul class="panel_con w50">
+                <li>
+                    <div>
+                        <span>名称：</span>
+                        <em>*</em>
+                    </div>
+                    <input id="name" type="text" placeholder=""/>
+                </li>
+                <li class="nbm w100">
+                    <div></div>
+                    <div class="op">
+                        <input id="search" type="button" value="查询" class="btn btn_b"/>
+                        <input type="reset" value="重置" class="btn btn_o"/>
+                        <input id="add" type="button" value="新增" class="btn btn_b"/>
+                    </div>
+                </li>
+            </ul>
+        </form>
+        <div class="shortcut"></div>
+
+        <table class="table_default" id="table">
+            <thead>
+            <tr>
+                <th width="10%">商品名称</th>
+                <th width="10%">商品尺寸</th>
+                <th width="10%">图片</th>
+                <th width="12%">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    $(function () {
+        //查询登录用户的信息
+        $.ajax({
+            type: "POST",
+            url: "../user/check",
+            success: function (data) {
+                if(data.code=="200"){
+                    $("#username").html("欢迎 "+data.message)
+                    $('#table').dataTable({
+                        "sDom": "t" +
+                        "<'soc-pagenagtion' ip>",
+                        "oLanguage": {
+                            "sProcessing": "处理中...",
+                            "sLengthMenu": "显示 _MENU_ 项结果",
+                            "sZeroRecords": "没有匹配结果",
+                            "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                            "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                            "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                            "sInfoPostFix": "",
+                            "sSearch": "搜索:",
+                            "sUrl": "",
+                            "sEmptyTable": "对不起，没有内容！",
+                            "sLoadingRecords": "载入中...",
+                            "sInfoThousands": ",",
+                            "oPaginate": {
+                                "sFirst": "首页",
+                                "sPrevious": "上页",
+                                "sNext": "下页",
+                                "sLast": "末页"
+                            },
+                            "oAria": {
+                                "sSortAscending": ": 以升序排列此列",
+                                "sSortDescending": ": 以降序排列此列"
+                            }
+                        },
+                        "autoWidth": false,
+                        "processing": true,
+                        "serverSide": true,
+                        "searching": false,
+                        ordering: false,
+                        "info": true,
+                        "sPaginationType": "full_numbers",
+                        ajax: function (param, callback, settings) {
+                            var name = $("#name").val();
+                            var data_param = {
+                                name: name,
+                                pageNum: (param.start / param.length) + 1,
+                                pageSize: param.length
+                            };
+                            $.ajax({
+                                type: "POST",
+                                url: "../goods/page",
+                                dataType: "json",
+                                data: data_param,
+                                success: function (d) {
+                                    console.log(d);
+                                    if (d != null) {
+                                        callback({
+                                            recordsTotal: d.data.total,
+                                            recordsFiltered: d.data.total,
+                                            data: d.data.list
+                                        });
+                                    }
+                                }
+                            });
+                        },
+                        "columns": [
+                            {"data": "name"},
+                            {"data": "size"},
+                            {"data": "image"}
+                        ],
+                        "columnDefs": [
+                            {
+                                "render": function (data, type, row) {
+                                    if (row.image.length > 0) {
+                                        return [
+                                            "<img style='width: 50px;height: 30px;' src='../"+row.image+"'/>"
+                                        ].join('');
+                                    }else{
+                                        return [
+                                            row.image = ""
+                                        ].join('');
+                                    }
+                                },
+                                "targets": 2
+                            },
+                            {
+                                "render": function (data, type, row) {
+                                    return [
+                                        "<a  href=''>删除</a>"
+                                    ].join('');
+                                },
+                                "targets": 3
+                            }
+                        ]
+                    });
+                    $("#search").click(function () {
+                        var table = $('#table').DataTable();
+                        //触发ajax事件
+                        table.ajax.reload(null, true);
+                    });
+
+                    $("#add").click(function () {
+                        window.location.href="../goods/add"
+                    })
+                }else{
+                    window.location.href="../";
+                }
+            }
+        });
+    })
+</script>
