@@ -15,5 +15,7 @@ public interface GoodsService {
     public String upload(String realPath,CommonsMultipartFile file) throws IOException;
 
 
-    public String save(Goods goods, ModelMap model);
+    public boolean save(Goods goods);
+
+    public boolean delete(Goods goods);
 }

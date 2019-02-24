@@ -43,7 +43,7 @@ public class Goods implements Serializable {
 
     @Override
     public String toString() {
-        return "Goods{" +
+        return "GoodsDao{" +
                 "name='" + name + '\'' +
                 ", size='" + size + '\'' +
                 ", image='" + image + '\'' +

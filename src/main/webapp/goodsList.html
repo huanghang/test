@@ -20,15 +20,26 @@
         <div style="height: 100px;">
             <div style="margin-top:20px;height: 50px;font-size: 24px;margin-left: 5%;font-family: 微软雅黑;color: midnightblue">
                 <span>XX网上商城</span>
-                <span style="float:right;font-size: 14px;margin-right: 200px;margin-top: 10px;" id="username">欢迎用户登录</span>
+                <span style="float:right;font-size: 14px;margin-right: 200px;margin-top: 10px;"
+                      id="username">欢迎用户登录</span>
             </div>
             <div style="height: 40px;background:#3B99FC">
                 <ul style="width: 1190px;margin-left: auto;margin-right: auto;position: relative;height: 40px;position: relative;z-index: 1900;">
-                    <li style="width: 145px;float:left;"><a style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;background: #2676E3">商品管理</a></li>
-                    <li style="width: 145px;float:left;"><a style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;">订单管理</a></li>
-                    <li style="width: 145px;float:left;"><a style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;">用户管理</a></li>
-                    <li style="width: 145px;float:left;"><a style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;"></a></li>
-                    <li style="width: 145px;float:left;"><a style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;"></a></li>
+                    <li style="width: 145px;float:left;"><a
+                            style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;background: #2676E3">商品管理</a>
+                    </li>
+                    <li style="width: 145px;float:left;"><a
+                            style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;">订单管理</a>
+                    </li>
+                    <li style="width: 145px;float:left;"><a
+                            style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;">用户管理</a>
+                    </li>
+                    <li style="width: 145px;float:left;"><a
+                            style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;"></a>
+                    </li>
+                    <li style="width: 145px;float:left;"><a
+                            style="display: block;height: 40px;line-height: 40px;color: #fff;text-align: center;font-size: 14px;cursor:pointer;"></a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -57,7 +68,12 @@
             </ul>
         </form>
         <div class="shortcut"></div>
-
+        <div id="dialog-message" title="提示">
+            <p>
+                <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+                是否删除？
+            </p>
+        </div>
         <table class="table_default" id="table">
             <thead>
             <tr>
@@ -81,8 +97,8 @@
             type: "POST",
             url: "../user/check",
             success: function (data) {
-                if(data.code=="200"){
-                    $("#username").html("欢迎 "+data.message)
+                if (data.code == "200") {
+                    $("#username").html("欢迎 " + data.message)
                     $('#table').dataTable({
                         "sDom": "t" +
                         "<'soc-pagenagtion' ip>",
@@ -151,9 +167,9 @@
                                 "render": function (data, type, row) {
                                     if (row.image.length > 0) {
                                         return [
-                                            "<img style='width: 50px;height: 30px;' src='../"+row.image+"'/>"
+                                            "<img style='width: 50px;height: 30px;' src='../" + row.image + "'/>"
                                         ].join('');
-                                    }else{
+                                    } else {
                                         return [
                                             row.image = ""
                                         ].join('');
@@ -164,7 +180,7 @@
                             {
                                 "render": function (data, type, row) {
                                     return [
-                                        "<a  href=''>删除</a>"
+                                        "<a  href='#' id='del'>删除</a>"
                                     ].join('');
                                 },
                                 "targets": 3
@@ -178,10 +194,61 @@
                     });
 
                     $("#add").click(function () {
-                        window.location.href="../goods/add"
+                        window.location.href = "../goods/add"
                     })
-                }else{
-                    window.location.href="../";
+
+
+                    /**
+                     * 弹出对话框并传递参数
+                     */
+                    $('#table tbody').on('click', '#del', function () {
+                        var table = $('#table').DataTable();
+                        var data = table.row($(this).parents('tr')).data();
+                        $('#dialog-message').data("data", data).dialog('open');
+                        return false;
+                    });
+
+                    //jquery-ui 对话框设置
+                    $("#dialog-message").dialog({
+                        autoOpen: false,
+                        width: 400,
+                        resizable: false,
+                        height: 210,
+                        modal: true,
+                        title: "",
+                        buttons: [{
+                            html: "确认",
+                            "class": "btn btn_b",
+                            click: function () {
+                                var data = $("#dialog-message").data("data");
+                                $.ajax({
+                                    type: "POST",
+                                    url: "../goods/delete",
+                                    dataType: "json",
+                                    data: {"name": data.name},
+                                    success: function (d) {
+                                        alert(d.message);
+                                        location.href = "../goods/list";
+                                    }, error: function (d) {
+                                        alert(d.message);
+                                        location.href = "../goods/list";
+                                    }
+                                });
+                                $(this).dialog("close");
+                            }
+                        }, {
+                            html: "取消",
+                            "class": "btn btn_o",
+                            click: function () {
+                                $(this).dialog("close");
+                            }
+                        }]
+                    });
+
+
+
+                } else {
+                    window.location.href = "../";
                 }
             }
         });

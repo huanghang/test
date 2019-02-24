@@ -78,14 +78,22 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * 保存商品信息
      * @param goods
-     * @param model
      * @return
      */
     @Override
-    public String save(Goods goods, ModelMap model) {
-        model.put("name",goods.getName());
-        model.put("size",goods.getSize());
-        model.put("image",goods.getImage());
-        return model.get("image").toString();
+    public boolean save(Goods goods) {
+       boolean result=true;
+        return result;
+    }
+
+    /**
+     * 删除
+     * @param goods
+     * @return
+     */
+    @Override
+    public boolean delete(Goods goods) {
+        boolean result=true;
+        return result;
     }
 }

@@ -12,15 +12,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/user")
-@SessionAttributes("username")
 public class UserController {
 
     @Autowired
     private UserService userService;
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
+    public static Map<String,String> userMap=new HashMap<>();
 
     @RequestMapping(value = "home",method = RequestMethod.GET)
     public String home(){
@@ -31,16 +34,15 @@ public class UserController {
     /**
      * 登录
      * @param user
-     * @param modelMap
      * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(User user, ModelMap modelMap) {
+    public String login(User user) {
         boolean result=userService.findUser(user);
         if(!result){
             return "error";
         }else{
-            modelMap.addAttribute("username",user.getName());
+            userMap.put("username",user.getName());
             return "goodsList";
         }
     }
@@ -60,16 +62,15 @@ public class UserController {
 
     /**
      * 获取登录用户
-     * @param username
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/check",method = RequestMethod.POST)
-    public Result getName(@ModelAttribute("username") String username){
-        if(username==null){
+    public Result getName(){
+        if(userMap.get("username")==null){
             return Result.error("未获取到登录信息");
         }
-        return Result.success(username);
+        return Result.success(userMap.get("username"));
     }
 
 }
