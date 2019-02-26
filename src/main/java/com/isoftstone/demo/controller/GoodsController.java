@@ -17,6 +17,8 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/goods")
@@ -57,9 +59,7 @@ public class GoodsController {
     @ResponseBody
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public Result page(String name, Page page) {
-        String param = name;
-        System.out.println(param);
-        return Result.success(goodsService.getList(page));
+        return Result.success(goodsService.getList(name,page));
     }
 
     /**

@@ -2,17 +2,18 @@ package com.isoftstone.demo.controller;
 
 import com.isoftstone.demo.bean.Result;
 import com.isoftstone.demo.bean.User;
+import com.isoftstone.demo.service.SaibongService;
 import com.isoftstone.demo.service.UserService;
 import com.isoftstone.demo.util.Page;
-import com.sun.org.apache.regexp.internal.REUtil;
+import com.isoftstone.demo.util.SaibongUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -21,6 +22,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SaibongService saibongService;
+
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     public static Map<String,String> userMap=new HashMap<>();
@@ -42,6 +47,8 @@ public class UserController {
         if(!result){
             return "error";
         }else{
+            List<String> list= saibongService.getSaibongs(new SaibongUtil("KBKH","",1));
+            System.out.println(list.toString());
             userMap.put("username",user.getName());
             return "goodsList";
         }

@@ -1,34 +1,34 @@
 package com.isoftstone.demo.service.impl;
 
 import com.isoftstone.demo.bean.Goods;
-import com.isoftstone.demo.bean.User;
+import com.isoftstone.demo.dao.GoodsDao;
 import com.isoftstone.demo.kit.DateFormatKit;
 import com.isoftstone.demo.service.GoodsService;
 import com.isoftstone.demo.util.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class GoodsServiceImpl implements GoodsService {
     private static final Logger log = LoggerFactory.getLogger(GoodsServiceImpl.class);
 
+    @Autowired
+    private GoodsDao goodsDao;
+
+
     /**
      * 分页显示
-     * @param page
      * @return
      */
     @Override
-    public Page<Goods> getList(Page page) {
+    public Page<Goods> getList(String name,Page page) {
         List<Goods> list = new ArrayList<>();
         Goods u1 = new Goods("1", "11","upload/images/20190222/Desert.jpg");
         Goods u2 = new Goods("2", "12","upload/images/20190222/Tulips.jpg");
@@ -40,6 +40,10 @@ public class GoodsServiceImpl implements GoodsService {
         list.add(u3);
         list.add(u4);
         list.add(u5);
+        Map<String,String> map=new HashMap<>();
+        map.put("name",name);
+        map.put("start",String.valueOf(page.getStart()));
+        map.put("pageSize",String.valueOf(page.getPageSize()));
         Integer total = 200;
         return new Page<Goods>(page.getPageSize(), page.getPageNum(), total, list);
     }

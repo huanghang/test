@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isoftstone.demo.dao.SaibongDao">
+    <!--根据系统ID,采番key,中间值从采番规则表(SIBT02)查询规则-->
+    <select id="getSaibongRules" parameterType="com.isoftstone.demo.util.SaibongUtil"
+            resultType="com.isoftstone.demo.bean.SaibongRules">
+    SELECT * from sibt02 where cfzdm = #{cfzdm};
+</select>
+
+    <select id="getSaibong" resultType="com.isoftstone.demo.bean.SaibongHistory"
+            parameterType="com.isoftstone.demo.util.SaibongUtil">
+    SELECT * from SIBT01 where cfzdm=#{cfzdm} and zjz=#{zjz};
+</select>
+
+    <insert id="saveSaibong" parameterType="com.isoftstone.demo.util.SaibongUtil">
+    insert into sibt01(cfzdm,dqlsh,zjz) values(#{cfzdm},0,#{zjz});
+</insert>
+
+
+    <update id="upateSaibong" parameterType="com.isoftstone.demo.bean.SaibongHistory">
+    UPDATE sibt01 set dqlsh=#{dqlsh} where cfzdm=#{cfzdm} and zjz=#{zjz};
+</update>
+
+</mapper>
