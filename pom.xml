@@ -28,7 +28,7 @@
 
         <!-- Plugin的属性定义 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.7</java.version>
+        <java.version>1.8</java.version>
     </properties>
 
     <dependencies>
@@ -257,7 +257,6 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-        <!-- To use the plugin goals in your POM or parent POM -->
         <plugins>
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
